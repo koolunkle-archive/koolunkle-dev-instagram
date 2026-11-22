@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Card</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/toss/tossface@1.6.1/dist/tossface.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=block">
+<style>
+:root{--bg:#171C22;--fg:#F2EFE6;--g:#7DE3A0;--r:#FF6B6B;--mute:#9AA3AE;--surf:#232A33;--me:#2C4A3A;--code:#0F1317;--line:#2A313A;--kw:#C7A6FF}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);width:1080px;height:1350px;overflow:hidden;color:var(--fg);
+  font-family:'Pretendard','Tossface',sans-serif;-webkit-font-smoothing:antialiased}
+.card{position:relative;width:1080px;height:1350px;padding:72px 80px 0}
+header{display:flex;justify-content:space-between;align-items:center;height:60px}
+.badge{border:3px solid var(--g);color:var(--g);border-radius:40px;padding:6px 24px;font-size:30px;font-weight:800;letter-spacing:-.5px}
+.page{color:var(--mute);font-size:30px;letter-spacing:2px}
+main{margin-top:82px}
+.cover main{margin-top:70px}
+g{color:var(--g)} r{color:var(--r)} b{color:var(--fg);font-weight:700}
+.kicker{color:var(--g);font-size:30px;font-weight:800;margin-bottom:22px}
+h1{font-size:66px;font-weight:800;line-height:1.32;letter-spacing:-1.5px}
+.cover h1{font-size:84px;line-height:1.38}
+.sub{margin-top:34px;color:var(--mute);font-size:36px;line-height:1.6;letter-spacing:-.5px}
+.cover .sub{margin-top:44px}
+.blk{margin-top:44px}
+.p{color:var(--mute);font-size:34px;line-height:1.6}
+/* code */
+.code{background:var(--code);border:2px solid var(--line);border-radius:28px;padding:34px 0 40px;font-family:'JetBrains Mono','Pretendard','Tossface',monospace;font-size:29px;line-height:56px;overflow:hidden;font-variant-ligatures:none}
+.dots{display:flex;gap:12px;padding:0 38px 20px}.dots i{width:18px;height:18px;border-radius:50%;display:block}
+.code .ln{padding:0 40px;white-space:pre;border-left:6px solid transparent}
+.code .ln.r{background:#3E2427;border-left-color:var(--r)}
+.code .ln.g{background:#1F3A2C;border-left-color:var(--g)}
+.code .kw{color:var(--kw)} .code .cm,.code .st{color:#7F8A96}
+/* chat */
+.chat{display:flex;flex-direction:column;gap:36px}
+.bub{background:var(--surf);border-radius:30px;padding:30px 36px;font-size:36px;line-height:1.6;margin-right:120px}
+.bub.me{background:var(--me);margin:0 0 0 120px}
+.bub .who{display:block;color:var(--mute);font-size:26px;font-weight:700;margin-bottom:8px}
+/* chips */
+.chips{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.chip{border:2px solid var(--line);border-radius:14px;padding:18px 28px;text-align:center;font-family:'JetBrains Mono','Pretendard','Tossface',monospace;font-size:30px}
+.chip small{display:block;font-family:'Pretendard','Tossface',sans-serif;color:var(--mute);font-size:22px;margin-top:4px}
+.chip.on{border:3px solid var(--g)} .chip.bad{border:3px solid var(--r)}
+.arrow{color:var(--g);font-size:34px;font-weight:700}
+/* rows */
+.rows{display:flex;flex-direction:column;gap:22px}
+.row{display:flex;align-items:center;gap:26px}
+.row .chip{min-width:300px;text-align:left;font-size:30px}
+.row .to{font-family:'Pretendard','Tossface',sans-serif}
+/* checks */
+.checks{display:flex;flex-direction:column;gap:28px}
+.check{display:flex;gap:22px;align-items:flex-start;font-size:36px;font-weight:700;line-height:1.4}
+.check:before{content:'✓';flex:none;width:40px;height:40px;margin-top:4px;border-radius:8px;background:#3BB273;color:#fff;font-size:30px;display:grid;place-items:center}
+.check small{display:block;color:var(--mute);font-weight:400;font-size:30px}
+/* boxes */
+.box{border:3px solid var(--g);border-radius:28px;padding:42px 40px}
+.box .lab{color:var(--g);font-size:28px;font-weight:800;margin-bottom:14px}
+.box .tx{font-size:36px;line-height:1.65}
+/* faces */
+.faces{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.face{background:var(--surf);border-radius:28px;padding:20px 20px 26px;text-align:center}
+.face img{width:300px;display:block;margin:0 auto}
+.face div{color:var(--mute);font-size:30px;font-weight:700}
+/* bottom */
+.char{position:absolute;right:70px;bottom:95px}
+.char:before{content:'';position:absolute;inset:-18%;border-radius:50%;background:radial-gradient(circle,rgba(0,0,0,.28),transparent 68%);z-index:-1}
+.char img{display:block;width:100%}
+.char{z-index:1}.char.lg{width:440px;right:80px;bottom:110px}.char.md{width:300px}.char.sm{width:200px;right:60px;bottom:70px}.char.kc{width:250px;right:60px;bottom:70px}
+.prop{position:absolute;left:150px;bottom:250px;width:240px;text-align:center}
+.prop .e{font-family:'Tossface';font-size:150px;line-height:1}
+.prop .l{margin-top:18px;color:var(--mute);font-size:28px;font-weight:700}
+.more{position:absolute;left:80px;bottom:132px;color:var(--g);font-size:32px;font-weight:800}
+footer{position:absolute;left:80px;bottom:60px;color:var(--mute);font-size:30px;font-weight:600}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="../content/series.js"></script>
+<script>
+const q = new URLSearchParams(location.search);
+const ser = SERIES.find(s => s.id === (q.get('s') || SERIES[0].id));
+const idx = Math.max(1, +(q.get('p') || 1));
+const sl = ser.slides[idx - 1];
+const esc = t => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const KW = 'public|private|void|int|double|if|else|this|override|fun|val|var|class|return|throw|new|while|object|init';
+function hl(line) {
+  const re = new RegExp(`(//.*$)|("(?:[^"\\\\]|\\\\.)*")|\\b(${KW})\\b`, 'g');
+  return esc(line).replace(re, (m, cm, st, kw) => cm ? `<span class="cm">${cm}</span>` : st ? `<span class="st">${st}</span>` : `<span class="kw">${kw}</span>`);
+}
+const B = {
+  code: b => `<div class="code"><div class="dots"><i style="background:#FF5F57"></i><i style="background:#FEBC2E"></i><i style="background:#28C840"></i></div>${
+    b.code.map((l, i) => {
+      const k = (b.hl || {})[i + 1] || (b.diff && l[0] === '-' ? 'r' : b.diff && l[0] === '+' ? 'g' : '');
+      return `<div class="ln ${k}">${hl(l) || ' '}</div>`;
+    }).join('')}</div>`,
+  chat: b => `<div class="chat">${b.chat.map(m => `<div class="bub ${m.me ? 'me' : ''}"><span class="who">${m.who}</span>${m.t}</div>`).join('')}</div>`,
+  chips: b => `<div class="chips">${b.chips.map(c => typeof c === 'string' ? `<span class="arrow">${c}</span>` : `<div class="chip ${c.k || ''}">${c.t}${c.s ? `<small>${c.s}</small>` : ''}</div>`).join('')}</div>`,
+  rows: b => `<div class="rows">${b.rows.map(([a, z, k]) => `<div class="row"><div class="chip ${k || ''}">${a}</div><span class="arrow">→</span><div class="chip to">${z}</div></div>`).join('')}</div>`,
+  checks: b => `<div class="checks">${b.checks.map(c => `<div class="check"><div>${c}</div></div>`).join('')}</div>`,
+  box: b => `<div class="box"><div class="lab">${b.lab || '댓글로 알려주세요'}</div><div class="tx">${b.box}</div></div>`,
+  p: b => `<div class="p">${b.p}</div>`,
+  faces: b => `<div class="faces">${b.faces.map(([c, l]) => `<div class="face"><img src="../assets/characters/${c}.png" alt=""><div>${l}</div></div>`).join('')}</div>`,
+};
+const cover = idx === 1;
+const blocks = (sl.b || []).map(b => `<div class="blk">${B[Object.keys(B).find(k => k in b)](b)}</div>`).join('');
+document.getElementById('root').innerHTML = `
+<div class="card ${cover ? 'cover' : ''}">
+  <header><span class="badge">${ser.badge}</span><span class="page">${idx}/${ser.slides.length}</span></header>
+  <main>
+    ${sl.k ? `<div class="kicker">${sl.k}</div>` : ''}
+    <h1>${sl.t}</h1>
+    ${sl.s ? `<div class="sub">${sl.s}</div>` : ''}
+    ${blocks}
+  </main>
+  ${sl.prop ? `<div class="prop"><div class="e">${sl.prop[0]}</div><div class="l">${sl.prop[1]}</div></div>` : ''}
+  ${cover ? '<div class="more">옆으로 넘겨보기 →</div>' : ''}
+  ${sl.c ? `<div class="char ${cover ? 'lg' : sl.c.startsWith('keycat') ? 'kc' : sl.cs || 'md'}"><img src="../assets/characters/${q.get('c') || sl.c}.png" alt=""></div>` : ''}
+  <footer>@koolunkle.dev</footer>
+</div>`;
+</script>
+</body>
+</html>
