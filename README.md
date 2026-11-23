@@ -1,7 +1,7 @@
 # koolunkle-dev-instagram
 
-Instagram [@koolunkle.dev](https://www.instagram.com/koolunkle.dev/) 카드뉴스 원고와 렌더러입니다.
-부트캠프 과제 PR 회고([gangnam3-java-oop](https://github.com/SurvivalCodingCampus/gangnam3-java-oop/pulls?q=is%3Apr+state%3Aclosed+author%3Akoolunkle))를 1080×1350 카드로 만듭니다.
+Instagram [@koolunkle.dev](https://www.instagram.com/koolunkle.dev/) 카드뉴스·릴스 원고와 렌더러입니다.
+부트캠프 과제 PR 회고([gangnam3-java-oop](https://github.com/SurvivalCodingCampus/gangnam3-java-oop/pulls?q=is%3Apr+state%3Aclosed+author%3Akoolunkle), [gangnam3-android](https://github.com/SurvivalCodingCampus/gangnam3-android/pulls?q=is%3Apr+state%3Aclosed+author%3Akoolunkle))를 1080×1350 카드와 1080×1920 릴스로 만듭니다.
 
 ![예시 카드](out/keycat/01.png)
 
@@ -10,10 +10,12 @@ Instagram [@koolunkle.dev](https://www.instagram.com/koolunkle.dev/) 카드뉴�
 ```
 content/series.js     카드 원고 (데이터)
 template/card.html    카드 템플릿
+template/reel.html    릴스 오버레이 템플릿 (원고 포함)
 render.mjs            PNG 렌더러 → out/<id>/NN.png
-out/                  렌더 결과 (게시용, 커밋함)
+out/                  렌더 결과 (게시용, 커밋함). 릴스는 out/reels/<id>.mp4
 legacy/               원고 없이 PNG만 남은 초기 카드 (01, 03, 04, 05)
 assets/characters/    캐릭터 투명 PNG와 추출 스크립트
+assets/reels/         릴스에 쓰는 앱 화면 스크린샷
 ```
 
 ## 사용법
@@ -32,6 +34,13 @@ node render.mjs 07 08    # 일부만
 1. `content/series.js`에 `{ id, pr, badge, slides: [...] }` 추가 (블록 종류는 파일 상단 주석과 `card.html`의 `blocks` 참고)
 2. `node render.mjs <id>` 후 `out/<id>/` 확인
 3. 아래 표에 한 줄 추가
+
+### 릴스
+
+1. 앱 화면은 gangnam3-android의 로컬 `demo/reels` 브랜치(debug 전용 `DemoActivity`)를 휴대폰에서 실행해 `adb shell screenrecord`로 녹화하거나 `screencap`으로 캡처
+2. `template/reel.html`의 `REELS`에 프레임 원고 추가 → Chrome headless로 1080×1920 PNG 렌더 (`?r=<id>&f=<프레임>`)
+3. ffmpeg로 녹화본 + 오버레이 합성, 장면 사이는 `xfade`. 출력은 반드시 `-pix_fmt yuv420p` (아니면 재생 안 됨)
+4. 위 250px·아래 350px은 인스타 UI에 가려지므로 비워 둔다. 앱 화면이 나오면 디자인 출처(Jega-Jnr, Figma Community "Food Recipe App")를 표기
 
 ## 캐릭터
 
@@ -61,6 +70,9 @@ node render.mjs 07 08    # 일부만
 
 ## 폴더 ↔ PR
 
+PR 번호는 [gangnam3-java-oop](https://github.com/SurvivalCodingCampus/gangnam3-java-oop) 기준, `android#N`은 [gangnam3-android](https://github.com/SurvivalCodingCampus/gangnam3-android) 기준입니다.
+
+
 | 폴더 | PR | 시리즈 | 비고 |
 |---|---|---|---|
 | legacy/01 | #30 | AI가 또 거짓말함 #1 | PNG만 있음 |
@@ -82,9 +94,23 @@ node render.mjs 07 08    # 일부만
 | 17 | #93 | 생존 일지 #4 | 솔직 후기+회고 통합, 코드는 PR 실제 주입 방식 |
 | 18 | #98 | 일상 비유로 배우는 개념 #6 | 미반영 타임아웃 지적 → Mapper 테스트로 교체 |
 | 19 | #106 | AI가 또 거짓말함 #2 | 오타 일화를 "검증은 나에게도"로 연결, 회고는 PR 원문 기준 |
+| 20 | android#1 | 생존 일지 #5 | Android 파트 첫 편. 상태 없는 컴포저블 + Modifier (미반영 접근성 지적 제외) |
+| 21 | android#8 | 생존 일지 #6 | 컴포넌트 역할 분담 (Dialog는 부르는 쪽이 감싸기). 리뷰 봇 일화 제외 |
+| 22 | android#12 | 일상 비유로 배우는 개념 #7 | debounce(엘리베이터 문) + flowOn. 로그인·회원가입 화면과 회고는 제외 |
+| 23 | android#16 | 생존 일지 #7 | Stability 경고를 receiver로 숨겼다가 AI 검토 후 되돌림. 리뷰 봇 일화 제외 |
+
+### 릴스
+
+| 파일 | PR | 내용 |
+|---|---|---|
+| reels/20.mp4 | android#1 | 고정 value vs 부르는 쪽 상태 입력창, Modifier 순서 실험 |
+| reels/21.mp4 | android#8 | 버튼 3종 눌림 색, 별점 다이얼로그 |
+| reels/22.mp4 | android#12 | 로그인·회원가입 화면, 반복된 입력칸 6개 |
+| reels/23.mp4 | android#16 | 스플래시, 저장한 레시피 목록, Stability 경고 |
 
 ## 라이선스
 
 - 코드(`render.mjs`, `template/`, `assets/characters/*.py`): [MIT](LICENSE)
-- 콘텐츠(원고, 카드 이미지, 캐릭터): © koolunkle, All rights reserved. 무단 사용·재배포 금지
+- 콘텐츠(원고, 카드 이미지, 릴스, 캐릭터): © koolunkle, All rights reserved. 무단 사용·재배포 금지
+- 릴스 속 앱 UI 디자인: Jega-Jnr, Figma Community "Food Recipe App" — 디자인 저작권은 원작자에게 있음
 - 글꼴: Pretendard, Tossface — SIL Open Font License 1.1 (CDN 로드, 저장소에 포함하지 않음)

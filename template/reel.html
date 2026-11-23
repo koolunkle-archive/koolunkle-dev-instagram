@@ -1,0 +1,96 @@
+<!doctype html>
+<!-- 릴스 오버레이 1080x1920: reel.html?r=<id>&f=<프레임>. 창(.win) 자리는 투명 → ffmpeg가 화면 녹화를 그 아래에 깐다 -->
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/toss/tossface@1.6.1/dist/tossface.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{--bg:#171C22;--fg:#F2EFE6;--g:#7DE3A0;--mute:#9AA3AE;--code:#0F1317;--line:#2A313A}
+*{margin:0;box-sizing:border-box}
+html,body{width:1080px;height:1920px;overflow:hidden;background:transparent;color:var(--fg);
+  font-family:'Pretendard','Tossface',sans-serif;-webkit-font-smoothing:antialiased}
+g{color:var(--g)}
+.badge{position:absolute;top:262px;left:60px;font-size:28px;font-weight:700;color:var(--g);border:2px solid var(--g);border-radius:99px;padding:8px 22px}
+.t{position:absolute;top:334px;left:60px;right:60px;font-size:62px;font-weight:800;line-height:1.2;letter-spacing:-1px}
+.win{position:absolute;left:60px;top:560px;width:960px;height:760px;border-radius:36px;box-shadow:0 0 0 2400px var(--bg)}
+.win::after{content:'';position:absolute;inset:0;border-radius:36px;border:3px solid var(--line)}
+.cap{position:absolute;top:1360px;left:60px;right:60px;font-size:44px;font-weight:700;line-height:1.35}
+.chip{display:inline-block;margin-top:22px;background:var(--code);border:2px solid var(--line);border-radius:14px;padding:12px 22px;
+  font-family:'JetBrains Mono',monospace;font-size:30px;color:var(--g);font-variant-ligatures:none}
+.credit{position:absolute;top:1548px;left:60px;font-size:24px;color:var(--mute)}
+.sub{position:absolute;top:412px;left:60px;right:60px;font-size:36px;color:var(--mute)}
+.shots{position:absolute;top:490px;left:0;right:0;display:flex;justify-content:center;gap:20px;background:var(--bg);height:1040px}
+.shot{position:relative;width:515px;height:1040px;border-radius:28px;border:3px solid var(--line);background-color:#fff;background-repeat:no-repeat;
+  background-size:515px auto;overflow:hidden}
+.shots:has(.vid){background:transparent}
+.shot.vid{background:transparent;box-shadow:0 0 0 2400px var(--bg)}
+.badge,.t,.sub,.credit{z-index:1}
+.box{position:absolute;border:5px solid var(--g);border-radius:14px;background:rgba(125,227,160,.18)}
+.end .lb{font-size:30px;font-weight:700;color:var(--g)}
+.end{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;text-align:center;padding:250px 60px 350px}
+.end .t{position:static;font-size:66px}
+.end img{width:300px}
+.end p{font-size:36px;color:var(--mute);line-height:1.5}
+</style>
+<body>
+<script>
+const REELS = {
+  '20': {
+    badge: '레시피 앱 부품 · 부트캠프 23일차',
+    credit: 'UI 디자인: Jega-Jnr, Figma Community "Food Recipe App"',
+    frames: {
+      fixed: { t: '입력창을<br><g>상태 없이</g> 만들기 ⌨️', cap: 'value를 고정하면 쳐도 안 써짐', chip: 'InputField(value = "") {}' },
+      hoist: { t: '입력창을<br><g>상태 없이</g> 만들기 ⌨️', cap: '부르는 쪽이 상태로 받아주면 써짐', chip: 'value = email, onValueChange = { email = it }' },
+      pad:   { t: 'Modifier <g>순서</g> 실험 🧪', cap: 'padding 먼저 → 안쪽만 눌림', chip: '.padding(28.dp).clickable { }' },
+      click: { t: 'Modifier <g>순서</g> 실험 🧪', cap: 'clickable 먼저 → 바깥까지 눌림', chip: '.clickable { }.padding(28.dp)' },
+      end:   { end: true, lb: '오늘의 회고', t: '순서 하나로<br><g>결과</g>가 달라진다', p: '적용 순서에 따라 결과가 달라지는 Modifier처럼,<br>동작 원리를 이해하며 꼼꼼히<br>학습할 필요가 있다고 느꼈다.', c: 'keycat-smile' },
+    },
+  },
+  '21': {
+    badge: '레시피 앱 부품 · 부트캠프 24일차',
+    credit: 'UI 디자인: Jega-Jnr, Figma Community "Food Recipe App"',
+    frames: {
+      press: { t: '누르는 동안<br><g>색이 바뀌는</g> 버튼 🎨', cap: '꾹 누르면 회색, 떼면 원래대로', chip: 'interactionSource.collectIsPressedAsState()' },
+      rate:  { t: '별점 <g>다이얼로그</g> ⭐', cap: '0점이면 Send를 못 누름', chip: '.clickable(enabled = rating > 0)' },
+      sent:  { t: '별점 <g>다이얼로그</g> ⭐', cap: '띄우고 닫는 건 부르는 쪽 상태로', chip: 'if (showDialog) { Dialog { ... } }' },
+      end:   { end: true, t: '컴포넌트한테<br><g>어디까지</g> 맡길까? 🧩', p: '눌림 색은 버튼이,<br>띄우고 닫는 건 부르는 쪽이', c: 'keycat-smile' },
+    },
+  },
+  '22': {
+    badge: '레시피 앱 화면 · 부트캠프 25일차',
+    credit: 'UI 디자인: Jega-Jnr, Figma Community "Food Recipe App"',
+    frames: {
+      in:    { t: '<g>로그인</g> 화면 만들기 📱', sub: '이메일 · 비밀번호 + 소셜 로그인', shots: [{ src: '22-signin.png' }] },
+      up:    { t: '<g>회원가입</g> 화면도 📝', sub: '이름 · 이메일 · 비밀번호 · 확인 + 약관 동의', shots: [{ src: '22-signup.png' }] },
+      both:  { t: '근데 만들다 보니… 🤔', sub: '어디서 본 코드가 자꾸 나옴', shots: [{ src: '22-signin.png' }, { src: '22-signup.png' }] },
+      boxes: { t: '입력칸만 <g>6개</g> 😵', sub: 'OutlinedTextField 블록을 6번 반복', shots: [
+        { src: '22-signin.png', boxes: [[84, 661, 996, 819], [84, 972, 996, 1130]] },
+        { src: '22-signup.png', boxes: [[84, 430, 996, 588], [84, 713, 996, 871], [84, 996, 996, 1154], [84, 1279, 996, 1437]] }] },
+      end:   { end: true, lb: '오늘의 회고', t: '같은 코드가 반복될 때<br><g>언제</g> 컴포넌트로 뺄까?', p: '화면을 만들면서 동일한 코드가 반복됐는데,<br>공통 컴포넌트로 언제 분리할지 기준이 필요하다', c: 'keycat-anxious' },
+    },
+  },
+  '23': {
+    badge: '레시피 앱 화면 · 부트캠프 26일차',
+    credit: 'UI 디자인: Jega-Jnr, Figma Community "Food Recipe App"',
+    frames: {
+      splash: { t: '레시피 앱 <g>첫 화면</g> 🍳', sub: '스플래시: 배경 이미지 + 시작 버튼', shots: [{ src: '23-splash.png' }] },
+      list:   { t: '저장한 레시피 <g>목록</g> 📋', sub: 'ViewModel이 init에서 불러와 StateFlow로', shots: [{ vid: true }] },
+      coil:   { t: '저장한 레시피 <g>목록</g> 📋', sub: '화면은 관찰만, 이미지는 Coil로 URL 로딩', shots: [{ vid: true }] },
+      warn:   { end: true, lb: '근데 경고가 떴다 ⚠️', t: 'List 파라미터에<br><g>Stability</g> 경고', p: 'receiver로 바꾸니 경고는 사라졌지만<br>AI: "경고만 숨었고, 문제는 그대로예요"', c: 'keycat-anxious' },
+      end:    { end: true, lb: '오늘의 회고', t: '경고를 없애기 전에<br><g>무슨 문제</g>인지 먼저', p: '경고를 없애는 것보다, 그 경고가<br>실제로 어떤 문제를 가리키는지<br>먼저 이해해야 할 것 같다', c: 'keycat-smile' },
+    },
+  },
+};
+// 폰 스크린샷(1080x2340)의 y=100부터 515px 폭으로 축소해 보여줌. box = 폰 좌표 [x1,y1,x2,y2]
+const K = 515 / 1080, Y0 = 100;
+const shot = s => s.vid ? '<div class="shot vid"></div>' : `<div class="shot" style="background-image:url(../assets/reels/${s.src});background-position:0 ${-Y0 * K}px">${(s.boxes || []).map(([a, b, c, d]) =>
+  `<div class="box" style="left:${a * K - 8}px;top:${(b - Y0) * K - 8}px;width:${(c - a) * K + 16}px;height:${(d - b) * K + 16}px"></div>`).join('')}</div>`;
+const q = new URLSearchParams(location.search), R = REELS[q.get('r')], F = R.frames[q.get('f')];
+document.body.innerHTML = F.end
+  ? `<div class="end"><img src="../assets/characters/${F.c}.png">${F.lb ? `<div class="lb">${F.lb}</div>` : ''}<div class="t">${F.t}</div><p>${F.p}</p></div><div class="credit" style="top:1548px">${R.credit}</div>`
+  : F.shots
+  ? `<div class="badge">${R.badge}</div><div class="t" style="font-size:58px">${F.t}</div><div class="sub">${F.sub}</div>
+     <div class="shots">${F.shots.map(shot).join('')}</div><div class="credit">${R.credit}</div>`
+  : `<div class="win"></div><div class="badge">${R.badge}</div><div class="t">${F.t}</div>
+     <div class="cap">${F.cap}<br><span class="chip">${F.chip}</span></div><div class="credit">${R.credit}</div>`;
+</script>
